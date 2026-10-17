@@ -1,5 +1,5 @@
 ## Description: <br>
-MAL (Mask Auto-Label) for weakly-supervised segmentation — produces segmentation masks from minimal annotations (point or box annotations) using a ViT-MAE backbone. <br>
+MAL (Mask Auto-Label) skill for weakly-supervised segmentation that produces segmentation masks from minimal point or box annotations using a ViT-MAE backbone, used when training, evaluating, or running inference for a TAO MAL model. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -9,7 +9,7 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache-2.0 <br>
 ## Use Case: <br>
-Developers and engineers training, evaluating, or running inference for weakly-supervised segmentation models using the NVIDIA TAO Toolkit. <br>
+Developers and engineers who need to train, evaluate, or run inference with TAO Mask Auto-Label (MAL) models to generate segmentation masks from COCO-style box or point annotations using NVIDIA TAO containers, including AutoML-routed training. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
@@ -29,11 +29,12 @@ Mitigation: Review and scan skill before deployment. <br>
 - [spec_template_train.yaml](references/spec_template_train.yaml) <br>
 - [spec_template_evaluate.yaml](references/spec_template_evaluate.yaml) <br>
 - [spec_template_inference.yaml](references/spec_template_inference.yaml) <br>
+- [NVIDIA TAO Skill Bank](https://github.com/NVIDIA-TAO/tao-skill-bank) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
+**Output Format:** [Markdown with inline bash code blocks and YAML spec files] <br>
 **Output Parameters:** [1D] <br>
 **Other Properties Related to Output:** [None] <br>
 
@@ -44,35 +45,36 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-1 evaluation task (1 positive) against skill-evaluator-dataset-snapshot. <br>
+1 evaluation task (1 positive), 1 attempt per task, each attempt run in an isolated sandbox pod in the k8s-sandbox environment. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Whether the skill is safe to use (no unsafe operations, secret leakage, or unauthorized access). <br>
-- Correctness: Whether the final answer is correct against the reference answer. <br>
-- Discoverability: Whether the right skill was loaded and executed when needed. <br>
+- Security: Whether the skill is safe to use: checks for unsafe operations, secret leakage, and unauthorized access. <br>
+- Correctness: Whether the answer produced by the skill-assisted agent is correct. <br>
+- Discoverability: Whether the right skill was loaded and activated when needed. <br>
 - Effectiveness: Whether the skill helped the agent complete the user's goal and expected workflow. <br>
-- Efficiency: Whether the skill avoids wasted tool or skill usage. <br>
+- Efficiency: Whether the skill avoided wasted tool calls and token usage. <br>
 
 Underlying evaluation signals used in this run: <br>
 - `security`: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- `skill_execution`: Verifies the expected skill was found and executed. <br>
-- `skill_efficiency`: Measures routing quality, workspace-aware skill reads, and productive tool use. <br>
-- `accuracy`: Verifies final-answer correctness against the reference answer. <br>
-- `goal_accuracy`: Checks whether the user's goal was achieved. <br>
-- `behavior_check`: Checks whether the expected workflow behavior was followed. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity. <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
+- `token_efficiency`: Actual uncached prompt plus completion token usage. <br>
 
 
 
 ## Evaluation Results: <br>
 | Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
 |---|---:|---:|
-| Overall | 58% → 97% (+38 points) | 57% → 58% (+1 points) |
-| Security | 100% → 100% (±0 points) | 100% → 100% (±0 points) |
-| Correctness | 60% → 100% (+40 points) | 100% → 100% (±0 points) |
-| Discoverability | 50% → 100% (+50 points) | 0% → 0% (±0 points) |
-| Effectiveness | 53% → 100% (+47 points) | 88% → 92% (+5 points) |
-| Efficiency | 29% → 83% (+55 points) | 0% → 0% (±0 points) |
+| Overall | 99.6% — baseline ran, but no comparable score was available; uplift unavailable | 66.4% — baseline ran, but no comparable score was available; uplift unavailable |
+| Security | 100.0% → 100.0% (±0.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Correctness | 0.0% → 100.0% (+100.0 points) | 80.0% → 80.0% (±0.0 points) |
+| Discoverability | 100.0% — baseline ran, but no comparable score was available; uplift unavailable | 0.0% — baseline ran, but no comparable score was available; uplift unavailable |
+| Effectiveness | 0.0% → 100.0% (+100.0 points) | 53.3% → 53.3% (±0.0 points) |
+| Efficiency | 97.8% — baseline ran, but no comparable score was available; uplift unavailable | 99.5% → 98.4% (-1.1 points) |
 
 ## Skill Version(s): <br>
 0.1.0 (source: frontmatter) <br>

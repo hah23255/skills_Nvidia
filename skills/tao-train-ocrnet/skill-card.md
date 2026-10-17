@@ -1,5 +1,5 @@
 ## Description: <br>
-Recognizes text content from cropped text-region images and supports CTC and attention-based decoders for training, evaluating, exporting, pruning, quantizing, retraining, and running inference for TAO OCRNet models. <br>
+OCRNet for scene text recognition that recognizes text content from cropped text-region images, supports CTC and attention-based decoders, and is used when training, evaluating, exporting, pruning, quantizing, retraining, or running inference for a TAO OCRNet model. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -9,7 +9,7 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache 2.0 <br>
 ## Use Case: <br>
-Developers and engineers training, evaluating, pruning, quantizing, exporting, and running inference on OCRNet scene text recognition models using NVIDIA TAO Toolkit. <br>
+Developers and engineers use this skill to train, evaluate, prune, quantize, retrain, export, and deploy NVIDIA TAO OCRNet scene text recognition models on cropped text-region images using Docker-based TAO containers and TensorRT deploy flows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
@@ -25,23 +25,18 @@ Risk: Review before execution as proposals could introduce incorrect or misleadi
 Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
+- [OCRNet Deploy (references/tao-deploy-ocrnet.md)](references/tao-deploy-ocrnet.md) <br>
 - [skill_info.yaml](references/skill_info.yaml) <br>
-- [TAO Deploy OCRNet](references/tao-deploy-ocrnet.md) <br>
-- [Deploy skill_info.yaml](references/tao-deploy-ocrnet.skill_info.yaml) <br>
-- [Spec Template: Train](references/spec_template_train.yaml) <br>
-- [Spec Template: Evaluate](references/spec_template_evaluate.yaml) <br>
-- [Spec Template: Export](references/spec_template_export.yaml) <br>
-- [Spec Template: Inference](references/spec_template_inference.yaml) <br>
-- [Spec Template: Prune](references/spec_template_prune.yaml) <br>
-- [Spec Template: Quantize](references/spec_template_quantize.yaml) <br>
-- [Spec Template: Retrain](references/spec_template_retrain.yaml) <br>
+- [Schema manifest](schemas/manifest.json) <br>
+- [Train spec template](references/spec_template_train.yaml) <br>
+- [TAO Skill Bank](https://github.com/NVIDIA-TAO/tao-skill-bank) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
+**Output Type(s):** [Shell commands, Configuration instructions, Files] <br>
+**Output Format:** [Markdown with inline bash code blocks and nested YAML spec files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+**Other Properties Related to Output:** [Model artifacts (checkpoints, ONNX, TensorRT engines, LMDB datasets) are written to the job-record results directory.] <br>
 
 ## Evaluation Agents Used: <br>
 - Claude Code (`aws/anthropic/bedrock-claude-opus-4-8`) <br>
@@ -50,35 +45,36 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-1 evaluation task (1 positive) from skill-evaluator-dataset-snapshot/1. <br>
+1 evaluation task (1 positive), 1 attempt per task, run in isolated k8s-sandbox pods with and without the skill (evaluator version 1.5.6). <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- Correctness: Checks final-answer correctness against the reference answer. <br>
-- Discoverability: Checks whether the expected skill was found and executed. <br>
-- Effectiveness: Checks whether the user's goal was achieved and expected workflow behavior was followed. <br>
-- Efficiency: Checks routing quality, workspace-aware skill reads, and productive tool use. <br>
+- Security: Is it safe to use? <br>
+- Correctness: Is the answer correct? <br>
+- Discoverability: Was the right skill loaded when needed? <br>
+- Effectiveness: Did the skill help complete the task? (goal completion and expected workflow adherence) <br>
+- Efficiency: Did it avoid wasted tool calls and token usage? <br>
 
 Underlying evaluation signals used in this run: <br>
 - `security`: Unsafe operations, secret leakage, and unauthorized access. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity. <br>
 - `accuracy`: Final-answer correctness against the reference answer. <br>
-- `skill_execution`: Whether the expected skill was found and executed. <br>
 - `goal_accuracy`: Whether the user's goal was achieved. <br>
 - `behavior_check`: Whether the expected workflow behavior was followed. <br>
-- `skill_efficiency`: Routing quality, workspace-aware skill reads, and productive tool use. <br>
+- `token_efficiency`: Actual uncached prompt plus completion usage. <br>
 
 
 
 ## Evaluation Results: <br>
 | Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
 |---|---:|---:|
-| Overall | 46% → 93% (+47 points) | 55% → 95% (+40 points) |
-| Security | 100% → 100% (±0 points) | 100% → 100% (±0 points) |
-| Correctness | 20% → 100% (+80 points) | 100% → 100% (±0 points) |
-| Discoverability | 50% → 100% (+50 points) | 0% → 94% (+94 points) |
-| Effectiveness | 17% → 83% (+67 points) | 75% → 83% (+8 points) |
-| Efficiency | 45% → 83% (+38 points) | 0% → 100% (+100 points) |
+| Overall | 94.4% — baseline ran, but no comparable score was available; uplift unavailable | 71.4% — baseline ran, but no comparable score was available; uplift unavailable |
+| Security | 100.0% → 100.0% (±0.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Correctness | 0.0% → 100.0% (+100.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Discoverability | 100.0% — baseline ran, but no comparable score was available; uplift unavailable | 0.0% — baseline ran, but no comparable score was available; uplift unavailable |
+| Effectiveness | 0.0% → 100.0% (+100.0 points) | 75.0% → 58.3% (-16.7 points) |
+| Efficiency | 71.9% — baseline ran, but no comparable score was available; uplift unavailable | 99.6% → 98.4% (-1.2 points) |
 
 ## Skill Version(s): <br>
 0.1.0 (source: frontmatter) <br>

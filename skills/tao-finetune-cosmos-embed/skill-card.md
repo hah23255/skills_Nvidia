@@ -9,7 +9,7 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache 2.0 <br>
 ## Use Case: <br>
-Developers and engineers use this skill to fine-tune, evaluate, run inference on, and export Cosmos-Embed1 video-text embedding models for text-to-video retrieval, video-to-video search, and semantic deduplication. <br>
+Developers and engineers fine-tuning, evaluating, exporting, and running inference with Cosmos-Embed1 video-text embedding models for text-to-video retrieval, video-to-video search, and semantic deduplication. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
@@ -46,35 +46,36 @@ Mitigation: Review and scan skill before deployment. <br>
 
 
 ## Evaluation Tasks: <br>
-Evaluated against 1 task (1 positive) in isolated sandbox pods. <br>
+1 evaluation task (1 positive), with 1 attempt per task, each attempt run in an isolated sandbox pod. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- Correctness: Checks final-answer correctness against the reference answer. <br>
-- Discoverability: Checks whether the right skill was found and executed when needed. <br>
-- Effectiveness: Checks whether the skill helped the agent complete the user's goal and expected workflow. <br>
-- Efficiency: Checks routing quality, workspace-aware skill reads, and productive tool use. <br>
+- Security: Whether the skill is safe to use: checks for unsafe operations, secret leakage, and unauthorized access. <br>
+- Correctness: Whether the final answer is correct against the reference answer. <br>
+- Discoverability: Whether the right skill was loaded when needed. <br>
+- Effectiveness: Whether the skill helped complete the task (50% goal completion + 50% expected workflow adherence). <br>
+- Efficiency: Whether the skill avoided wasted tool calls and token usage (50% tool-call productivity + 50% token efficiency). <br>
 
 Underlying evaluation signals used in this run: <br>
-- `security`: Detects unsafe operations, secret leakage, and unauthorized access. <br>
-- `accuracy`: Verifies final-answer correctness against the reference answer. <br>
-- `skill_execution`: Verifies whether the expected skill was found and executed. <br>
-- `goal_accuracy`: Verifies whether the user's goal was achieved. <br>
-- `behavior_check`: Verifies whether the expected workflow behavior was followed. <br>
-- `skill_efficiency`: Verifies routing quality, workspace-aware skill reads, and productive tool use. <br>
+- `security`: Unsafe operations, secret leakage, and unauthorized access. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity (legacy wire id; routing is scored under Discoverability). <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
+- `token_efficiency`: Actual uncached prompt plus completion usage (50% of Efficiency). <br>
 
 
 
 ## Evaluation Results: <br>
 | Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
 |---|---:|---:|
-| Overall | 40% → 100% (+60 points) | 34% → 95% (+62 points) |
-| Security | 100% → 100% (±0 points) | 100% → 100% (±0 points) |
-| Correctness | 20% → 100% (+80 points) | 20% → 100% (+80 points) |
-| Discoverability | 50% → 100% (+50 points) | 0% → 94% (+94 points) |
-| Effectiveness | 17% → 100% (+83 points) | 48% → 83% (+35 points) |
-| Efficiency | 12% → 100% (+88 points) | 0% → 100% (+100 points) |
+| Overall | 99.5% | 95.4% |
+| Security | 100.0% → 100.0% (±0.0 points) | 100.0% → 100.0% (±0.0 points) |
+| Correctness | 20.0% → 100.0% (+80.0 points) | 0.0% → 100.0% (+100.0 points) |
+| Discoverability | 100.0% | 95.0% |
+| Effectiveness | 16.7% → 100.0% (+83.3 points) | 16.7% → 83.3% (+66.6 points) |
+| Efficiency | 97.5% | 98.7% |
 
 ## Skill Version(s): <br>
 0.1.0 (source: frontmatter) <br>
